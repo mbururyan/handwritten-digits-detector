@@ -1,2 +1,42 @@
+```{r}
+# Load in the data
 
+traindata <- read.table("http://bit.ly/DigitsDataset", sep=",", header = TRUE)
+head(traindata)
+```
+The dataset has 65 features, and we will use t-SNE to reduce them to a low dimension data.
+
+# Separate the labels
+
+```{r}
+labels <- traindata$class
+#Change the labels array to factor datatype
+traindata$class <- as.factor(traindata$class)
+
+#Check the datatype
+class(traindata$class)
+```
+
+# Distinguish the labels as colors for clear representation when plotting
+
+```{r}
+colors = rainbow(length(unique(traindata$class)))
+names(colors) = unique(traindata$class)
+
+colors
+```
+
+# Building the model
+
+```{r}
+head(traindata[, 1:64])
+
+numbers_tsne <- Rtsne(traindata[, 1:64], dims=2, perplexity = 30, verbose=TRUE, max_iter = 500)
+```
+
+#Plotting the result
+```{r}
+plot(numbers_tsne$Y, t='n', main='T-SNE RESULT')
+text(numbers_tsne$Y, labels = traindata$class, col = colors[traindata$class])
+```
 
